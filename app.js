@@ -1,12 +1,29 @@
 const geocode = require('./utils/geocode');
 const forecast = require('./utils/forecast');
 
-// geocode('Boston', (error, data) => {
-//   console.log('Error', error);
-//   console.log('Response', data);
-// });
+const location = process.argv[2];
 
-forecast(44.1545, -75.7088, (error, data) => {
-  console.log('Error', error)
-  console.log('Data', data)
-})
+if (!location) {
+  return console.log('Please provide a city name');
+} else {
+  geocode(location, (error, { latitude, longitude, location } = {}) => {
+
+    if (error) {
+      return console.log(error);
+    }
+
+    forecast(latitude, longitude, (error, forecastData) => {
+
+      if (error) {
+        return console.log(error);
+      }
+
+      console.log(location);
+      console.log(forecastData);
+
+    });
+  });
+}
+
+
+
